@@ -7,7 +7,6 @@ import email
 from email.message import EmailMessage
 
 
-
 def extract_info(user, password):
     #server creation
     server = imaplib.IMAP4_SSL('imap.gmail.com') #here you sould put the specific mail service that you want to use or similars
@@ -19,28 +18,29 @@ def extract_info(user, password):
 
 
         #select the emails and information to extract
-        _ , email_ids = server.search(None, '(UNSEEN FROM "The.mail.you.want@gmail.com")')
+        _ , email_ids = server.search(None, '(UNSEEN FROM "The.email.you.want@gmail.com")') # _ is nothing more than the status
         if email_ids[0]:
-            #here we just search for the possible gmails from where we are getting mails
+            #here we just search for the possible e-mail id we could have and split it if we have more than one
             for email_id in email_ids[0].split():
-                _ , email_data = server.fetch(email_id, '(RFC822)')
-                #here we pass the email data which has the email id and the body in RFC822 format
-                email_message = email.message_from_bytes(email_data[0][1])
+                _ , email_data = server.fetch(email_id, '(RFC822)') #here we get the email id and the content of the email
+                email_message = email.message_from_bytes(email_data[0][1]) # 0 and 1 are the featched data which we are converting using message_from_bytes do decode it
 
-                #here we can get the subject and body of the message
+                #here we can get the subject, from (who send the mail) and body of the message among other things
                 subject = email_message['subject']
+                from_id = email_message['from']
 
-                #here we just get the plain text or the body of the message, for that we use this for loop
+
                 body_content = ' '
                 
+                #loop to get every part of the text (body)
                 for part in email_message.walk():
-                    if part.get_content_type() == 'text/plain':
-                        body_content += part.as_string()
+                    if part.get_content_type() == 'text/plain': #extract only text/numeric data
+                        body_content += part.get_payload(decode=True).decode('utf-8') #Decode the payload
 
-                body_content = body_content.replace('Content-Type: text/plain; charset="UTF-8"', ' ') #this just hides something you don't want when reciving the alerts       
-
+                #hide this useles data for the purpose of the proyect
+                body_content = body_content.replace('Content-Type: text/plain; charset="UTF-8"', ' ') 
                 
-                igor_alert('The.mail.you.want@gmail.com', subject, body_content) #here you can use mobile services or e-mails
+                igor_alert('The.email.you.want@gmail.com', from_id, subject, body_content) #here you can use mobile services or e-mails
 
         else:
             print('no new messages')
@@ -58,25 +58,26 @@ def extract_info(user, password):
 
 
 #this function will be the one responsible to send the alert
-def igor_alert(to, subject, body):
+def igor_alert(to, from_id, subject, body):
 
-    #email creation giving the data we have on extract_info()
     msg = EmailMessage()
-    msg.set_content(body)
-    msg['subject']= "New Alert!: " + subject
+    msg.set_content(f'Message from: {from_id} \n \n {body}')
+    msg['subject']= (f'New Alert: {subject}')
     msg['to'] = to
 
     #user and password
-    user = 'The.mail.you.want@gmail.com'
+    user = 'The.email.you.want@gmail.com'
     msg['from'] = user
-    password = 'Your.password'
-    
+    password = 'Your password'
+
     #server creation and activation to send the alert
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(user, password)
     server.send_message(msg)
     print('message sent')
+    
+    
 
     #log out the server
     server.quit()
@@ -84,7 +85,7 @@ def igor_alert(to, subject, body):
 #this gives the program more "security" for sensible data
 
 if __name__ == '__main__':
-    user = 'The.mail.you.want@gmail.com'
-    password = 'Your.password'
-    extract_info(user, password)   
+    user = 'The.email.you.want@gmail.com'
+    password = 'Your password'
+    extract_info(user, password)     
     
