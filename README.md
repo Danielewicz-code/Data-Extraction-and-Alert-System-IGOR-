@@ -1,52 +1,74 @@
-# Data-Extraction-and-Alert-System-IGOR-
-Data Extraction and Alert System (IGOR) or DEAS-I.G.O.R
+# IGOR – Data Extraction and Alert System
 
-Description:
+**IGOR (Intelligent Gmail Observation & Response)** is a lightweight Python-based automation tool that connects to your Gmail inbox, extracts unread messages from a specific sender, and generates customizable alert emails based on the extracted content.
 
-The Data Extraction and Alert System, is a versatile Python-based project designed to efficiently extract valuable information from Gmail messages and then generate customized alerts based on the content, I have to say tho that this can be adapted to many "alert sources", I'll talk about that later on when we get deeper.
+Although currently tailored for Gmail, its modular structure allows adaptation to other data sources and use cases.
 
-Key Features:
+---
 
-Data Extraction: IGOR can connect to your Gmail account, retrieve emails, and extract relevant information. This project uses Python's built-in imaplib and email modules to fetch email data, including subject lines and body content.
+## Key Features
 
-Customizable Alerts: IGOR can generate highly customizable email alerts, allowing users to set their own subject lines and message content for outgoing alerts. It adds "New Alert!" in front of the subject line for clear identification.
+- Email Monitoring: Uses IMAP to securely fetch unread messages from your Gmail inbox.
+- Data Extraction: Extracts subject and body content from emails using Python’s `imaplib` and `email` modules.
+- Custom Alerts: Generates personalized alert emails using `smtplib`, prepending “New Alert!” for quick visibility.
+- Automation: Once configured, IGOR runs autonomously and processes incoming emails without user interaction.
 
-Automation: Once configured, IGOR can automatically process emails, extracting information and sending alerts without manual intervention. This feature is particularly useful for monitoring incoming data, such as real-time alerts or notifications.
+---
 
-Usage Scenario:
+## Usage Example
 
-Consider a scenario where you receive important data, alerts, or notifications via email. IGOR can help you monitor your Gmail inbox and automatically extract information from specific senders or with specific characteristics. For example, you can set it up to monitor for unread emails from a specific email address and extract data like subject lines and email content.
+Imagine receiving security alerts, server logs, or time-sensitive reports by email. IGOR can monitor for these and forward only the most important ones to your phone or another email address in real time.
 
-Let's break down how IGOR works:
+---
 
-Data Extraction: IGOR connects to your Gmail account, logs in, and selects the inbox. It then searches for unread emails from a specific sender. Once it identifies these emails, it extracts the subject and body content.
+## How It Works
 
-Customized Alerts: IGOR uses the extracted data to generate email alerts. It allows for customization of the outgoing email subject and body. It adds "New Alert!" to the subject for immediate recognition.
+1. Connects to Gmail using IMAP
+2. Searches for unread messages from a specific sender
+3. Extracts email content (subject and body)
+4. Sends a new email alert with the customized message
 
-Email Sending: After creating the alert email, IGOR uses the smtplib module to send the alert to a specified recipient. The recipient receives a clear, customized email alert based on the content of the original email.
+---
 
-Applications:
+## Applications
 
-IGOR can be used in various scenarios:
+- Real-time inbox monitoring
+- SMS-based alerting (via email-to-text gateways)
+- Notification routing
+- Lightweight data aggregation
+- Emergency or security alert systems
 
-Real-Time Monitoring: Use IGOR to monitor important email communications and receive real-time alerts on specific subjects or senders.
+---
 
-Notification System: Create a notification system that extracts relevant data from emails and sends it to your preferred channel or device for immediate attention.
+## Limitations
 
-Data Aggregation: Aggregate data from multiple sources into email alerts, making it easier to stay informed and organized.
+- Requires manual Gmail credentials or app-specific passwords
+- Limited to one sender at a time (currently)
+- Email-to-SMS alerts depend on cellular data
+- Gmail may restrict access without IMAP and proper security setup
 
-Security Alerts: Set up IGOR to monitor security alerts and respond swiftly to potential threats or incidents.
+---
 
-Customized Notifications: Tailor email alerts to specific needs, whether it's monitoring server health, tracking financial transactions, or staying updated on important news.
+## Security Notes
 
-Beyond Email:
+- Do not hardcode credentials.
+- Use environment variables, encrypted secrets, or OAuth2 for production.
+- OAuth2 support is a recommended future upgrade.
 
-While IGOR is designed for email data extraction and alerting, its core functionalities can be adapted for various data extraction and alerting needs beyond email. By modifying the data source and the method of data extraction, IGOR can be a valuable tool for real-time data processing and alerting in a wide range of applications.
+---
 
-Unlock the power of IGOR to enhance your data monitoring and alerting capabilities, bringing efficiency and automation to your information management.
+## Future Improvements
 
-Downside:
+- OAuth2 authentication
+- Multi-sender and regex filtering
+- CLI or config-file customization
+- Modular input/output (email, API, logs, etc.)
+- Logging and error handling system
 
-This program is great and it would work as spected if it weren't for one simple fact, i use this program to msessage me on my SMS, the thing is in order to recive any e-mail i need to use my cellphone data, because it uses my internet company to send the message, i'm sure if i could use a server or something like that this would not happend but is how it is at least right now.
+---
 
-Note: Ensure you set up your email credentials securely and handle sensitive data with caution when using IGOR in a production environment.
+## Project Motivation
+
+This project was built to solve a real problem: staying informed through SMS while offline. Though it currently relies on mobile data for delivery via email-to-text, it serves as a solid foundation for larger monitoring and automation workflows.
+
+IGOR is flexible, practical, and lightweight — but has the potential to power more advanced systems.
